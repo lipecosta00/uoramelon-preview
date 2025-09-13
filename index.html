@@ -77,7 +77,37 @@
             box-shadow: 0 2px 15px rgba(0,0,0,0.1);
             z-index: 999;
             padding: 1rem 0;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform: translateY(-150%);
+        }
+
+        .theme-selector.visible {
+            transform: translateY(0);
+        }
+
+        /* Floating Palette Toggle Button */
+        .floating-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1010;
+            background: linear-gradient(135deg, var(--green-pastel-dark), var(--green-pastel));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
         }
 
         .theme-container {
@@ -87,6 +117,18 @@
             flex-direction: column;
             gap: 1rem;
             padding: 0 2rem;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-dark);
         }
 
         .theme-label {
@@ -348,7 +390,7 @@
 
         .hero-text h1 {
             font-size: 3.5rem;
-            color: var(--text-dark);
+            color: #333333;
             margin-bottom: 1rem;
             line-height: 1.1;
             font-weight: 800;
@@ -356,7 +398,7 @@
         }
 
         .hero-text .highlight {
-            color: var(--green-pastel-dark);
+            color: #FFB6B9;
             position: relative;
         }
 
@@ -477,7 +519,7 @@
         }
 
         .service-card h3 {
-            color: var(--green-pastel-dark);
+            color: var(--service-h3-color, var(--green-pastel-dark));
             margin-bottom: 1rem;
             font-size: 1.4rem;
             font-family: 'Montserrat', sans-serif;
@@ -923,7 +965,7 @@
         }
     </style>
 </head>
-<body>
+<body id="page-body">
     <!-- Header -->
     <header>
         <nav>
@@ -944,6 +986,7 @@
     <div class="theme-selector">
         <div class="theme-container">
             <span class="theme-label">🎨 Escolha a paleta de cores:</span>
+            <button class="close-btn">&times;</button>
             <div class="theme-options">
                 <button class="theme-btn active" data-theme="cream">
                     <div class="theme-preview">
@@ -1061,7 +1104,7 @@
     <section id="home" class="hero">
         <div class="hero-content">
             <div class="hero-text">
-                <h1>Transforme sua presença digital com a <span class="highlight">uor🍉melon</span></h1>
+                <h1>Transforme sua presença digital com a <span class="highlight"><br />uor🍉melon</span></h1>
                 <p>Somos especialistas em social media e criação de conteúdo. Do planejamento à execução, cuidamos de tudo para fazer sua marca crescer no mundo digital.</p>
                 <a href="#contact" class="cta-button">Comece Agora</a>
             </div>
@@ -1198,7 +1241,7 @@
                     🎉
                 </div>
                 <div class="portfolio-overlay">
-                    <h4>Tech Conference 2024</h4>
+                    <h4>Tech Conference 2025</h4>
                     <p>Cobertura completa em tempo real</p>
                     <div class="portfolio-tags">
                         <span class="portfolio-tag">Eventos</span>
@@ -1383,7 +1426,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 uor🍉melon - Todos os direitos reservados</p>
+        <p>&copy; 2025 uor🍉melon - Todos os direitos reservados</p>
         <div class="social-links">
             <a href="#">📷</a>
             <a href="#">🎬</a>
@@ -1391,6 +1434,8 @@
             <a href="#">✉️</a>
         </div>
     </footer>
+
+    <button id="toggle-palette-btn" class="floating-btn">🎨</button>
 
     <script>
         // Theme color palettes
@@ -1457,7 +1502,8 @@
                 '--accent-cream': '#FED7D7',
                 '--light-cream': '#FFF5F5',
                 '--text-dark': '#C53030',
-                '--text-light': '#E53E3E'
+                '--text-light': '#E53E3E',
+                '--service-h3-color': '#15803D'
             },
             sage: {
                 '--primary-cream': '#16A34A',
@@ -1631,6 +1677,28 @@
         document.querySelector('form').addEventListener('submit', (e) => {
             e.preventDefault();
             alert('Obrigado pelo contato! Retornaremos em breve 🍉');
+        });
+
+        // Toggle palette visibility
+        const togglePaletteBtn = document.getElementById('toggle-palette-btn');
+        const themeSelectorDiv = document.querySelector('.theme-selector');
+
+        if (togglePaletteBtn && themeSelectorDiv) {
+            togglePaletteBtn.addEventListener('click', () => {
+                themeSelectorDiv.classList.toggle('visible');
+            });
+        }
+
+        // Close palette when clicking outside
+        document.getElementById('page-body').addEventListener('click', (e) => {
+            if (!themeSelectorDiv.contains(e.target) && e.target !== togglePaletteBtn) {
+                themeSelectorDiv.classList.remove('visible');
+            }
+        });
+
+        // Close palette when clicking the close button
+        document.querySelector('.close-btn').addEventListener('click', () => {
+            themeSelectorDiv.classList.remove('visible');
         });
     </script>
 </body>
